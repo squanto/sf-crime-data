@@ -1,6 +1,8 @@
 var csvModule = (function(window, $) {
     function _parseCsvData(data) {
-        return data.split('\n').map(function(row) {
+        data = data.replace(/\n$/, "");
+        data = data.split('\n');
+        return data.map(function(row) {
             var data = row.split('","');
             return data.map(function(datum) {
                 datum = datum.replace(/"/g, '');
