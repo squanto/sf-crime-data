@@ -13,7 +13,6 @@ var csvModule = (function(window, $) {
     }
 
     function _addcsCategories(rows) {
-        // Asscoate csCategory with csv data on incidntnum
         var csCategoriesForIncidents = tableModule.csCategoriesForIncidents();
         var headers = rows.slice(0, 1);
         rows = rows.slice(1).map(function(row) {
@@ -37,16 +36,19 @@ var csvModule = (function(window, $) {
         }, csvLink)
     }
 
-    function _downloadCsv(event, dataLink) {
-        event.currentTarget.download = "San Francisco Crime Data Export.csv";
-        event.currentTarget.href = encodeURI(dataLink);
+    function _downloadCsv(dataLink) {
+        var link = document.createElement("a");
+        link.download = "San Francisco Crime Data Export.csv";
+        link.href = encodeURI(dataLink);
+        link.click();
     }
 
-    function _onCsvFetchSuccess(event, data) {
+    function _onCsvFetchSuccess(data) {
+        // Parse data string to array of arrays
         rows = _parseCsvData(data);
 
         // Add Campus Safety Category column header
-        rows[0].push("Campus Safety Category")
+        rows[0].push("Campus Safety Category");
 
         // Add csCategory to each incident row
         rows = _addcsCategories(rows);
@@ -55,14 +57,16 @@ var csvModule = (function(window, $) {
         var dataLink = _formatCsv(rows);
 
         // Download the newly formatted csv
-        _downloadCsv(event, dataLink);
-  }
+        _downloadCsv(dataLink);
+    }
 
-  function _fetchAndDownloadCsv(event, url) {
-    $.get(url, _onCsvFetchSuccess.bind(this, event), 'text');
-  }
+    function _fetchAndDownloadCsv(event) {
+        var url = $(event.currentTarget).data('csv-link');
+        $.get(url, _onCsvFetchSuccess, 'text');
+    }
 
-  return {
-    download: _fetchAndDownloadCsv
-  }
+    return {
+        download: _fetchAndDownloadCsv
+    };
+
 })(window, jQuery);
