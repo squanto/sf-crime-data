@@ -12,6 +12,15 @@ var csvModule = (function(window, $) {
         })
     }
 
+    // Returns object of incidentnum -> cscategory
+    // Call only after tableModule_loadDataToTable
+    function _csCategoriesForIncidents() {
+        return tableModule.incidentJson.reduce(function(memo, incident) {
+          memo[incident["incidntnum"]] = incident["cscategory"]
+          return memo;
+        }, {});
+    }
+
     function _addcsCategories(rows) {
         var csCategoriesForIncidents = tableModule.csCategoriesForIncidents();
         var headers = rows.slice(0, 1);

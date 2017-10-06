@@ -170,15 +170,6 @@ var tableModule = (function(window, $) {
         return incidentJson;
     }
 
-    // Returns object of incidentnum -> cscategory
-    // Call only after _loadDataToTable
-    function _csCategoriesForIncidents() {
-        return this.incidentJson.reduce(function(memo, incident) {
-          memo[incident["incidntnum"]] = incident["cscategory"]
-          return memo;
-        }, {});
-    }
-
     function _loadDataToTable(incidentJson) {
         _table.clear();
 
@@ -192,8 +183,7 @@ var tableModule = (function(window, $) {
     return {
         init: _init,
         loadDataToTable: _loadDataToTable,
-        csCategoryCheck: _csCategoryCheck,
-        csCategoriesForIncidents: _csCategoriesForIncidents
+        csCategoryCheck: _csCategoryCheck
     };
 
 })(window, jQuery);
